@@ -12,7 +12,13 @@ class_name WaveConfig
 @export_range(0.1, 10.0, 0.1) var spawn_interval: float = 1.0
 @export_range(1, 10) var enemies_per_spawn: int = 2
 
-@export_group("Enemy Stats")
+@export_group("Enemy Types")
+## Chances de spawn (soma deve ser ~1.0)
+@export_range(0.0, 1.0, 0.05) var enemy_lvl_1_chance: float = 1.0
+@export_range(0.0, 1.0, 0.05) var enemy_lvl_2_chance: float = 0.0
+@export_range(0.0, 1.0, 0.05) var enemy_lvl_3_chance: float = 0.0
+
+@export_group("Enemy Stats (Legacy - usado para spawn manual)")
 @export_range(1, 100) var enemy_health: int = 1
 @export_range(10.0, 500.0, 10.0) var enemy_speed: float = 50.0
 @export_range(1, 100) var enemy_points: int = 10

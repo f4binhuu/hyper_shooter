@@ -1,6 +1,8 @@
 extends Node2D
 
-@onready var enemy_scene = preload("res://elements/enemy.tscn")
+@onready var enemy_lvl_1_scene = preload("res://elements/enemy.tscn")
+@onready var enemy_lvl_2_scene = preload("res://elements/enemy_lvl_2.tscn")
+@onready var enemy_lvl_3_scene = preload("res://elements/enemy_lvl_3.tscn")
 @onready var multiplier_scene = preload("res://elements/multiplier.tscn")
 @onready var upgrade_ui_scene = preload("res://ui/upgrade_selection_ui.tscn")
 
@@ -101,14 +103,12 @@ func on_enemy_killed():
 func spawn_enemies():
 	# Spawnar múltiplos inimigos de uma vez
 	for i in range(current_wave.enemies_per_spawn):
+		# Escolher tipo de inimigo baseado nas chances da wave
+		var enemy_scene = choose_enemy_type()
 		var enemy = enemy_scene.instantiate()
+
 		var spawn_x = randf_range(50, get_viewport_rect().size.x - 50)
 		enemy.position = Vector2(spawn_x, -50)
-
-		# Configurar propriedades do inimigo baseado na wave
-		enemy.max_health = current_wave.enemy_health
-		enemy.speed = current_wave.enemy_speed
-		enemy.points_value = current_wave.enemy_points
 
 		add_child(enemy)
 
@@ -117,6 +117,18 @@ func spawn_enemies():
 
 		# Pequeno delay entre cada spawn
 		await get_tree().create_timer(0.1).timeout
+
+func choose_enemy_type() -> PackedScene:
+	# Weighted random selection baseado nas chances da wave
+	var total_chance = current_wave.enemy_lvl_1_chance + current_wave.enemy_lvl_2_chance + current_wave.enemy_lvl_3_chance
+	var rand_value = randf() * total_chance
+
+	if rand_value < current_wave.enemy_lvl_1_chance:
+		return enemy_lvl_1_scene
+	elif rand_value < current_wave.enemy_lvl_1_chance + current_wave.enemy_lvl_2_chance:
+		return enemy_lvl_2_scene
+	else:
+		return enemy_lvl_3_scene
 
 func spawn_multiplier():
 	if multipliers.size() == 0:

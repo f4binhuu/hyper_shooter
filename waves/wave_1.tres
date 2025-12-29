@@ -1,16 +1,10 @@
-[gd_resource type="Resource" script_class="WaveConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WaveConfig" load_steps=2 format=3 uid="uid://bk6fcd5daha7m"]
 
 [ext_resource type="Script" uid="uid://mdcfq72v8ucp" path="res://configs/wave_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-wave_number = 1
 wave_description = "Wave 1 - Tutorial
 Inimigos fracos para você se acostumar"
 spawn_interval = 1.5
-enemies_per_spawn = 1
-enemy_health = 1
-enemy_speed = 50.0
-enemy_points = 10
 wave_duration = 20.0
-enemies_to_kill = 0

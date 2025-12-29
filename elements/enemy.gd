@@ -24,11 +24,6 @@ func _ready():
 	previous_x = position.x
 	original_speed = speed
 
-	# Ajustar cor baseado na vida (inimigos mais fortes = mais escuros)
-	if max_health > 2:
-		sprite.modulate = Color(0.8, 0, 0)  # Vermelho escuro
-	elif max_health > 1:
-		sprite.modulate = Color(1, 0.3, 0.3)  # Vermelho médio
 
 func _physics_process(delta):
 	# Aplicar knockback
@@ -76,10 +71,11 @@ func take_damage(amount: int):
 	if health <= 0:
 		die()
 	else:
+		var original_modulate = sprite.modulate
 		# Flash de dano
 		sprite.modulate = Color(1.5, 1.5, 1.5)
 		await get_tree().create_timer(0.1).timeout
-		sprite.modulate = Color(1, 0, 0)
+		sprite.modulate = original_modulate
 
 func die():
 	# Dar pontos e carga de shockwave ao player
