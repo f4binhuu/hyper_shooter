@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WaveConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://wave_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wave_number = 4
+wave_description = "Wave 4 - Invasão
+Horda massiva!"
+spawn_interval = 0.6
+enemies_per_spawn = 3
+enemy_health = 2
+enemy_speed = 120.0
+enemy_points = 20
+wave_duration = 30.0
+enemies_to_kill = 0

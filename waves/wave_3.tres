@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WaveConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://wave_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wave_number = 3
+wave_description = "Wave 3 - Tanques
+Inimigos com mais vida!"
+spawn_interval = 1.2
+enemies_per_spawn = 2
+enemy_health = 3
+enemy_speed = 80.0
+enemy_points = 25
+wave_duration = 30.0
+enemies_to_kill = 0

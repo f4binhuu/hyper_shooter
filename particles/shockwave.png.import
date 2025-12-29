@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1pg6c285gwoi"
-path="res://.godot/imported/spr_multiplier.png-d2c3f8c1695d6dde8c9554bd6d759aa2.ctex"
+uid="uid://b08k8njuqu4il"
+path="res://.godot/imported/shockwave.png-b812278ac7b041a514e6a0c76619a2b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://spr_multiplier.png"
-dest_files=["res://.godot/imported/spr_multiplier.png-d2c3f8c1695d6dde8c9554bd6d759aa2.ctex"]
+source_file="res://particles/shockwave.png"
+dest_files=["res://.godot/imported/shockwave.png-b812278ac7b041a514e6a0c76619a2b9.ctex"]
 
 [params]
 

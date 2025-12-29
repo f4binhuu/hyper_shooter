@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WaveConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://wave_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wave_number = 2
+wave_description = "Wave 2 - Acelerando
+Mais inimigos, mais rápidos!"
+spawn_interval = 1.0
+enemies_per_spawn = 2
+enemy_health = 1
+enemy_speed = 100.0
+enemy_points = 15
+wave_duration = 25.0
+enemies_to_kill = 0

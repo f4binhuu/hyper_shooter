@@ -6,10 +6,15 @@ var trail
 var is_destroyed = false
 var horizontal_speed = 0.0
 
+# Upgrade properties
+var damage = 1
+var pierce_count = 0  # Quantos inimigos pode atravessar
+var enemies_hit = 0   # Quantos já atingiu
+
 func _ready():
 	add_to_group("bullet")
 	
-	var trail_scene = preload("res://player_trail.tscn")
+	var trail_scene = preload("res://particles/bullet_trail.tscn")
 	trail = trail_scene.instantiate()
 	trail.z_index = -2
 	get_parent().add_child(trail)
