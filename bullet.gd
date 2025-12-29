@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var speed = 500.0
+@export var speed = 900.0
 
 var trail
 var is_destroyed = false

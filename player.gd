@@ -36,4 +36,5 @@ func shoot():
 	var bullet = bullet_scene.instantiate()
 	bullet.position = position + Vector2(0, -20)
 	bullet.horizontal_speed = sprite.rotation * 300
+	bullet.z_index = -1
 	get_parent().add_child(bullet)
