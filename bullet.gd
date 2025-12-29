@@ -11,6 +11,7 @@ func _ready():
 	
 	var trail_scene = preload("res://player_trail.tscn")
 	trail = trail_scene.instantiate()
+	trail.z_index = -2
 	get_parent().add_child(trail)
 	trail.position = position
 

@@ -11,9 +11,28 @@ var can_shoot = true
 var previous_x = 0.0
 
 func _ready():
+	var propulsion_center = preload("res://player_propulsion.tscn").instantiate()
+	add_child(propulsion_center)
+	propulsion_center.position = Vector2(0, 35)
+	propulsion_center.scale = Vector2(0.8, 0.5)
+	propulsion_center.z_index = -1
+	
+	var propulsion_left = preload("res://player_propulsion.tscn").instantiate()
+	add_child(propulsion_left)
+	propulsion_left.position = Vector2(-73, 20)
+	propulsion_left.scale = Vector2(0.3, 0.3)
+	propulsion_left.z_index = -1
+	
+	var propulsion_right = preload("res://player_propulsion.tscn").instantiate()
+	add_child(propulsion_right)
+	propulsion_right.position = Vector2(73, 20)
+	propulsion_right.scale = Vector2(0.3, 0.3)
+	propulsion_right.z_index = -1
+	
 	var viewport_height = get_viewport_rect().size.y
 	position = Vector2(360, viewport_height - 200)
 	previous_x = position.x
+
 
 func _physics_process(delta):
 	var target_x = get_global_mouse_position().x
