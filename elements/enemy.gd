@@ -9,6 +9,8 @@ extends Area2D
 
 @onready var sprite = $Sprite2D
 @onready var death_particles = preload("res://particles/enemy_death.tscn")
+@onready var floating_text_scene = preload("res://ui/floating_text.tscn")
+@onready var hit_impact_scene = preload("res://particles/hit_impact.tscn")
 
 var health = 1
 var previous_x = 0.0
@@ -49,6 +51,9 @@ func _on_area_entered(area):
 
 		take_damage(bullet_damage)
 
+		# Spawn hit impact particles
+		spawn_hit_impact()
+
 		# Pierce: bullet só é destruído se não puder atravessar mais inimigos
 		if "pierce_count" in area and "enemies_hit" in area:
 			area.enemies_hit += 1
@@ -68,23 +73,44 @@ func _on_area_entered(area):
 
 func take_damage(amount: int):
 	health -= amount
+
+	# Spawn floating damage text
+	spawn_floating_text("-" + str(amount), Color.WHITE, 28)
+
 	if health <= 0:
 		die()
 	else:
 		var original_modulate = sprite.modulate
-		# Flash de dano
-		sprite.modulate = Color(1.5, 1.5, 1.5)
-		await get_tree().create_timer(0.1).timeout
+		# Flash de dano mais intenso
+		sprite.modulate = Color(2.0, 2.0, 2.0)
+		await get_tree().create_timer(0.08).timeout
 		sprite.modulate = original_modulate
 
 func die():
 	# Dar pontos e carga de shockwave ao player
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
-		player.power += points_value
+		var points_earned = points_value
+
+		# Aplicar multiplicador de combo se tiver
+		if player.has_method("get_combo_multiplier"):
+			var multiplier = player.get_combo_multiplier()
+			points_earned = int(points_value * multiplier)
+
+		player.power += points_earned
+
 		if player.has_method("add_boost_charge"):
 			player.add_boost_charge(player.shockwave_charge_per_kill)
-		print("Inimigo LVL 1 morto! Player ganhou +", points_value, " | Força total: ", player.power)
+
+		# Registrar kill para combo
+		if player.has_method("register_kill"):
+			player.register_kill()
+
+		# Spawn floating text GRANDE com pontos ganhos
+		var text_color = Color.GREEN if points_earned == points_value else Color(1, 0.8, 0)  # Laranja se combo
+		spawn_floating_text("+" + str(points_earned), text_color, 40)
+
+		print("Inimigo morto! Player ganhou +", points_earned, " | Força total: ", player.power)
 
 	spawn_death_particles()
 	queue_free()
@@ -153,3 +179,14 @@ func freeze(duration: float):
 		speed = original_speed
 		sprite.modulate = original_modulate
 		print("Inimigo descongelado!")
+
+func spawn_floating_text(value: String, color: Color, size: int):
+	var text = floating_text_scene.instantiate()
+	text.position = position
+	get_parent().add_child(text)
+	text.setup(value, color, size)
+
+func spawn_hit_impact():
+	var impact = hit_impact_scene.instantiate()
+	impact.position = position
+	get_parent().add_child(impact)

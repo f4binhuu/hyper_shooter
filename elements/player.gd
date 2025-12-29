@@ -19,6 +19,12 @@ var bullet_damage = 1
 var bullet_pierce = 0
 var extra_bullets = 0
 
+# Combo system
+var combo_count = 0
+var combo_timer = 0.0
+var combo_window = 2.0  # 2 segundos para manter combo
+signal combo_changed(count: int)
+
 @onready var bullet_scene = preload("res://elements/bullet.tscn")
 @onready var shockwave_blast_scene = preload("res://particles/shockwave_blast.tscn")
 @onready var sprite = $Sprite2D
@@ -65,6 +71,12 @@ func _physics_process(delta):
 
 	if shockwave_charge < 100.0:
 		shockwave_charge = min(shockwave_charge + (100.0 / shockwave_cooldown) * delta, 100.0)
+
+	# Atualizar combo timer
+	if combo_count > 0:
+		combo_timer -= delta
+		if combo_timer <= 0:
+			reset_combo()
 
 	position.y = clamp(position.y, 50, 1230)
 	
@@ -267,3 +279,30 @@ func apply_upgrade(config: UpgradeConfig):
 		UpgradeConfig.UpgradeType.SHOCKWAVE_BOOST:
 			shockwave_damage += int(value)
 			print("Novo dano de shockwave: ", shockwave_damage)
+
+# Combo system functions
+func register_kill():
+	combo_count += 1
+	combo_timer = combo_window
+	combo_changed.emit(combo_count)
+
+	if combo_count > 1:
+		print("COMBO x", combo_count, "!")
+
+func reset_combo():
+	if combo_count > 0:
+		print("Combo perdido!")
+	combo_count = 0
+	combo_changed.emit(0)
+
+func get_combo_multiplier() -> float:
+	if combo_count <= 1:
+		return 1.0
+	elif combo_count <= 3:
+		return 1.5
+	elif combo_count <= 5:
+		return 2.0
+	elif combo_count <= 10:
+		return 2.5
+	else:
+		return 3.0
