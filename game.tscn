@@ -1,6 +1,7 @@
-[gd_scene load_steps=31 format=3 uid="uid://drgo5ls7e4722"]
+[gd_scene load_steps=32 format=3 uid="uid://drgo5ls7e4722"]
 
 [ext_resource type="Script" uid="uid://bx0xt6daevqu6" path="res://scripts/game.gd" id="1_e2o6t"]
+[ext_resource type="Resource" path="res://resources/game_config.tres" id="1_game_config"]
 [ext_resource type="Script" uid="uid://mdcfq72v8ucp" path="res://resources/wave_config.gd" id="2_5b14r"]
 [ext_resource type="Script" uid="uid://dh7fh85ku4k5v" path="res://scenes/player.gd" id="2_eow3j"]
 [ext_resource type="Texture2D" uid="uid://b020o7pqoc7bt" path="res://assets/sprites/spr_player.png" id="3_feb5d"]
@@ -39,10 +40,10 @@ outline_color = Color(0, 0, 0, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_e2o6t")
+game_config = ExtResource("1_game_config")
 waves = Array[ExtResource("2_5b14r")]([ExtResource("8_wave1"), ExtResource("9_wave2"), ExtResource("10_wave3"), ExtResource("11_wave4"), ExtResource("12_wave5")])
 multipliers = Array[ExtResource("8_bnpwn")]([ExtResource("13_mult_x3"), ExtResource("14_mult_x2"), ExtResource("15_mult_add100"), ExtResource("16_mult_div2"), ExtResource("17_mult_sub100"), ExtResource("18_mult_shield"), ExtResource("19_mult_nuke")])
 upgrades = Array[ExtResource("16_36jdj")]([ExtResource("20_upg_fire"), ExtResource("21_upg_damage"), ExtResource("22_upg_multi"), ExtResource("23_upg_pierce"), ExtResource("24_upg_shield"), ExtResource("25_upg_shock")])
-upgrade_scaling_multiplier = 1.3
 
 [node name="Player" type="CharacterBody2D" parent="."]
 script = ExtResource("2_eow3j")

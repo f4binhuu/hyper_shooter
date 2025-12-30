@@ -6,17 +6,10 @@ extends Node2D
 @onready var multiplier_scene = preload("res://scenes/multiplier.tscn")
 @onready var upgrade_ui_scene = preload("res://ui/upgrade_selection_ui.tscn")
 
+@export var game_config: GameConfig
 @export var waves: Array[WaveConfig] = []
-@export var loop_waves: bool = true  # Repetir waves quando acabar
-
-@export_group("Multipliers")
 @export var multipliers: Array[MultiplierConfig] = []
-@export_range(3.0, 15.0, 0.5) var multiplier_spawn_interval: float = 7.0
-
-@export_group("Upgrades")
 @export var upgrades: Array[UpgradeConfig] = []
-@export var upgrade_point_threshold: int = 500
-@export var upgrade_scaling_multiplier: float = 1.8
 
 var current_wave_index: int = 0
 var current_wave: WaveConfig
@@ -24,7 +17,7 @@ var wave_timer: float = 0.0
 var spawn_timer: float = 0.0
 var multiplier_timer: float = 0.0
 var enemies_killed_this_wave: int = 0
-var next_upgrade_at: int = 500
+var next_upgrade_at: int = 0
 var last_power_check: int = 0
 
 signal wave_started(wave_number: int)
@@ -32,7 +25,11 @@ signal wave_completed(wave_number: int)
 
 
 func _ready() -> void:
-	next_upgrade_at = upgrade_point_threshold
+	if not game_config:
+		push_error("ERRO: GameConfig não configurado! Adicione um game_config.tres no Inspector.")
+		return
+
+	next_upgrade_at = game_config.upgrade_point_threshold
 
 	if waves.size() > 0:
 		start_wave(0)
@@ -53,7 +50,7 @@ func _process(delta):
 	# Timer de spawn de multiplicadores
 	multiplier_timer += delta
 
-	if multiplier_timer >= multiplier_spawn_interval:
+	if multiplier_timer >= game_config.multiplier_spawn_interval:
 		spawn_multiplier()
 		multiplier_timer = 0.0
 
@@ -68,7 +65,7 @@ func _process(delta):
 
 func start_wave(wave_index: int):
 	if wave_index >= waves.size():
-		if loop_waves:
+		if game_config.loop_waves:
 			wave_index = 0  # Reinicia do começo
 		else:
 			print("Todas as waves completadas!")
@@ -185,12 +182,12 @@ func show_upgrade_screen():
 	# Pausar o jogo
 	get_tree().paused = true
 
-	# Escolher 3 upgrades aleatórios
+	# Escolher N upgrades aleatórios (configurável)
 	var available_upgrades = upgrades.duplicate()
 	available_upgrades.shuffle()
 
 	var selected_upgrades = []
-	for i in range(min(3, available_upgrades.size())):
+	for i in range(min(game_config.upgrades_per_selection, available_upgrades.size())):
 		selected_upgrades.append(available_upgrades[i])
 
 	# Mostrar UI de seleção
@@ -216,7 +213,7 @@ func select_upgrade(upgrade: UpgradeConfig):
 
 	# Atualizar threshold para próximo upgrade com scaling multiplicativo
 	var current_threshold = next_upgrade_at
-	next_upgrade_at = int(current_threshold * upgrade_scaling_multiplier)
+	next_upgrade_at = int(current_threshold * game_config.upgrade_scaling_multiplier)
 
 	print("Próximo upgrade em: ", next_upgrade_at, " pontos (", next_upgrade_at - player.power, " restantes)")
 

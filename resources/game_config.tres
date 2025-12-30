@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GameConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/game_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+upgrade_point_threshold = 1000
+upgrade_scaling_multiplier = 2.0
+upgrades_per_selection = 3
+multiplier_spawn_interval = 7.0
+enemy_health_multiplier = 1.0
+enemy_speed_multiplier = 1.0
+enemy_points_multiplier = 1.0
+loop_waves = true
