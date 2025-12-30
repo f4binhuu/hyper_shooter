@@ -1,4 +1,4 @@
-# 🎮 Hyper Shooter - Documentação Completa
+# 🎮 Hyper Shooter
 
 ## 📋 Visão Geral
 
