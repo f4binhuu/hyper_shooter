@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://b56rdhgve2rol" path="res://resources/upgrade_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+upgrade_type = 5
+display_name = "Shield Boost"
+description = "Increase shield multiplier spawn chance"
+icon_color = Color(0.5, 0.8, 1, 1)
+base_value = 0.05
+increment_per_level = 0.03
+max_level = 8
+is_count_based = false

@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnm8qy5k3l2tp"]
+
+[sub_resource type="Curve" id="Curve_death"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_death"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.9254902, 0.2, 0.18431373, 1, 1, 0.69803923, 0.37254903, 1, 1, 1, 1, 0)
+
+[node name="EnemyDeath" type="CPUParticles2D"]
+emitting = false
+amount = 30
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+randomness = 0.5
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, 150)
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+scale_amount_min = 3.0
+scale_amount_max = 8.0
+scale_amount_curve = SubResource("Curve_death")
+color = Color(0.92941177, 0.49019608, 0.25882354, 1)
+color_ramp = SubResource("Gradient_death")

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MultiplierConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://dydn8fncywmlf" path="res://resources/multiplier_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+multiplier_type = 6
+value = 1.0
+display_text = "NUKE"
+color = Color(1, 0.8, 0, 1)
+rarity = 0.05
+speed = 75.0
+freeze_duration = 3.0

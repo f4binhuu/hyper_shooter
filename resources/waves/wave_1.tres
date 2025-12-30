@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WaveConfig" load_steps=2 format=3 uid="uid://bk6fcd5daha7m"]
+
+[ext_resource type="Script" uid="uid://mdcfq72v8ucp" path="res://resources/wave_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wave_description = "Wave 1 - Tutorial
+Inimigos fracos para você se acostumar"
+spawn_interval = 1.5
+wave_duration = 20.0

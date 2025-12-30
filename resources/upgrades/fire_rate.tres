@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://b56rdhgve2rol" path="res://resources/upgrade_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+upgrade_type = 0
+display_name = "Fire Rate"
+description = "Increase your shooting speed"
+icon_color = Color(1, 1, 0, 1)
+base_value = 0.05
+increment_per_level = 0.03
+max_level = 10
+is_count_based = false
