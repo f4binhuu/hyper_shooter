@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyConfig" load_steps=3 format=3 uid="uid://enemy_config_swarm"]
+
+[ext_resource type="Script" path="res://resources/enemy_config.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/spr_enemy_lvl_1.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_script")
+tier = 0
+tier_name = "Swarm"
+description = "Inimigos fracos mas rápidos que atacam em enxame.
+Ganham velocidade nos níveis altos."
+sprite = ExtResource("2_sprite")
+base_scale = 0.35
+base_color = Color(1, 1, 1, 1)
+base_health = 1
+base_speed = 220.0
+base_xp = 1
+base_points = 10
+health_per_level = 0.5
+speed_per_level = 20.0
+xp_per_level = 0.3
+points_per_level = 5
+knockback_resistance = 1.0
+can_dodge = false
+spawns_on_death = 0

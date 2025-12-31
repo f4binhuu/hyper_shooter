@@ -1,11 +1,16 @@
 extends Node2D
 
-@onready var enemy_lvl_1_scene = preload("res://scenes/enemy.tscn")
-@onready var enemy_lvl_2_scene = preload("res://scenes/enemy_lvl_2.tscn")
-@onready var enemy_lvl_3_scene = preload("res://scenes/enemy_lvl_3.tscn")
+@onready var enemy_scene = preload("res://scenes/enemy.tscn")  # Scene base universal
 @onready var multiplier_scene = preload("res://scenes/multiplier.tscn")
 @onready var upgrade_ui_scene = preload("res://ui/upgrade_selection_ui.tscn")
 @onready var game_over_screen_scene = preload("res://ui/game_over_screen.tscn")
+
+# Enemy configs (Tier system)
+@onready var enemy_configs = [
+	preload("res://resources/enemies/enemy_config_swarm.tres"),    # Tier 1
+	preload("res://resources/enemies/enemy_config_bruiser.tres"),  # Tier 2
+	preload("res://resources/enemies/enemy_config_elite.tres")     # Tier 3
+]
 
 @export var game_config: GameConfig
 @export var audio_config: AudioConfig
@@ -183,11 +188,19 @@ func on_enemy_killed():
 			complete_wave()
 
 func spawn_enemies():
+	# Calcular nível dos inimigos baseado na wave atual
+	var enemy_level = WaveGenerator.calculate_enemy_level(current_wave.wave_number)
+
 	# Spawnar múltiplos inimigos de uma vez
 	for i in range(current_wave.enemies_per_spawn):
-		# Escolher tipo de inimigo baseado nas chances da wave
-		var enemy_scene = choose_enemy_type()
+		# Escolher tier baseado nas chances da wave
+		var enemy_tier_index = choose_enemy_tier()
+		var enemy_config = enemy_configs[enemy_tier_index]
+
+		# Instanciar enemy base e configurar
 		var enemy = enemy_scene.instantiate()
+		enemy.enemy_config = enemy_config
+		enemy.enemy_level = enemy_level
 
 		# Passar audio_config para o inimigo
 		if audio_config:
@@ -204,17 +217,18 @@ func spawn_enemies():
 		# Pequeno delay entre cada spawn
 		await get_tree().create_timer(0.1).timeout
 
-func choose_enemy_type() -> PackedScene:
+## Escolhe tier do inimigo (0=Swarm, 1=Bruiser, 2=Elite) baseado nas chances da wave
+func choose_enemy_tier() -> int:
 	# Weighted random selection baseado nas chances da wave
 	var total_chance = current_wave.enemy_lvl_1_chance + current_wave.enemy_lvl_2_chance + current_wave.enemy_lvl_3_chance
 	var rand_value = randf() * total_chance
 
 	if rand_value < current_wave.enemy_lvl_1_chance:
-		return enemy_lvl_1_scene
+		return 0  # Swarm (Tier 1)
 	elif rand_value < current_wave.enemy_lvl_1_chance + current_wave.enemy_lvl_2_chance:
-		return enemy_lvl_2_scene
+		return 1  # Bruiser (Tier 2)
 	else:
-		return enemy_lvl_3_scene
+		return 2  # Elite (Tier 3)
 
 func spawn_multiplier():
 	if multipliers.size() == 0:

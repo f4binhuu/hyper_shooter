@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyConfig" load_steps=3 format=3 uid="uid://enemy_config_bruiser"]
+
+[ext_resource type="Script" path="res://resources/enemy_config.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/spr_enemy_lvl_2.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_script")
+tier = 1
+tier_name = "Bruiser"
+description = "Lutador balanceado com HP médio.
+Escalamento consistente de vida e velocidade."
+sprite = ExtResource("2_sprite")
+base_scale = 0.24
+base_color = Color(1, 1, 1, 1)
+base_health = 3
+base_speed = 180.0
+base_xp = 2
+base_points = 20
+health_per_level = 1.5
+speed_per_level = 10.0
+xp_per_level = 0.6
+points_per_level = 10
+knockback_resistance = 0.8
+can_dodge = false
+spawns_on_death = 0

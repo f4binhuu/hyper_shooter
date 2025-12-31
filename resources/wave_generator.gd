@@ -133,6 +133,16 @@ static func should_spawn_boss(wave_number: int, boss_frequency: int = 5) -> bool
 	# Boss a cada N waves (ex: 5, 10, 15, 20...)
 	return wave_number > 0 and wave_number % boss_frequency == 0
 
+## Calcula nível dos inimigos baseado na wave atual
+## Enemies evoluem a cada 3 waves: 1→2→3→4→5 (cap)
+static func calculate_enemy_level(wave_number: int) -> int:
+	# Wave 1-2: Level 1
+	# Wave 3-5: Level 2
+	# Wave 6-8: Level 3
+	# Wave 9-11: Level 4
+	# Wave 12+: Level 5
+	return min(5, 1 + int(floor((wave_number - 1) / 3.0)))
+
 ## TODO FUTURO: Criar boss wave config
 ## static func generate_boss_wave(wave_number: int, boss_config: BossConfig) -> WaveConfig:
 ##     var wave = WaveConfig.new()

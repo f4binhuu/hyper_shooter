@@ -28,6 +28,7 @@ class_name GameConfig
 @export_range(3.0, 10.0, 0.5) var boss_prep_time: float = 5.0  ## Segundos de preparação antes do boss aparecer
 
 @export_group("Player Health")
-@export_range(1, 10) var player_max_health: int = 3  ## Vida máxima do player
+@export_range(50, 200, 10) var player_max_health: int = 100  ## Vida máxima do player (HP numérico)
 @export_range(0.5, 3.0, 0.1) var player_invincibility_duration: float = 1.0  ## Duração dos iframes após dano (segundos)
-@export_range(1, 5) var enemy_contact_damage: int = 1  ## Dano que inimigos causam ao colidir com player
+@export_range(5, 50, 5) var enemy_contact_damage: int = 20  ## Dano que inimigos causam ao colidir com player
+@export_range(5, 50, 5) var enemy_escape_damage: int = 15  ## Dano quando inimigo escapa pela parte inferior

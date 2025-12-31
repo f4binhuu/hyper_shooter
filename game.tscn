@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://drgo5ls7e4722"]
+[gd_scene load_steps=35 format=3 uid="uid://drgo5ls7e4722"]
 
 [ext_resource type="Script" uid="uid://glivlkdmjh2" path="res://scripts/game.gd" id="1_e2o6t"]
 [ext_resource type="Resource" path="res://resources/game_config.tres" id="1_game_config"]
@@ -29,9 +29,21 @@
 [ext_resource type="Resource" uid="uid://lr30q7xuukfg" path="res://resources/upgrades/pierce.tres" id="23_upg_pierce"]
 [ext_resource type="Resource" uid="uid://elkw1v3siok6" path="res://resources/upgrades/shield.tres" id="24_upg_shield"]
 [ext_resource type="Resource" uid="uid://cib8yn86hvm26" path="res://resources/upgrades/shockwave.tres" id="25_upg_shock"]
+[ext_resource type="Resource" path="res://resources/upgrades/health_regen.tres" id="26_upg_regen"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feb5d"]
 size = Vector2(32, 32)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_healthbar_bg"]
+bg_color = Color(0.2, 0.2, 0.2, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_healthbar_fill"]
+bg_color = Color(0.2, 0.8, 0.2, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_j5wjh"]
 font_size = 32
@@ -43,7 +55,7 @@ script = ExtResource("1_e2o6t")
 game_config = ExtResource("1_game_config")
 waves = Array[ExtResource("2_5b14r")]([ExtResource("8_wave1"), ExtResource("9_wave2"), ExtResource("10_wave3"), ExtResource("11_wave4"), ExtResource("12_wave5")])
 multipliers = Array[ExtResource("8_bnpwn")]([ExtResource("13_mult_x3"), ExtResource("14_mult_x2"), ExtResource("15_mult_add100"), ExtResource("16_mult_div2"), ExtResource("17_mult_sub100"), ExtResource("18_mult_shield"), ExtResource("19_mult_nuke")])
-upgrades = Array[ExtResource("16_36jdj")]([ExtResource("20_upg_fire"), ExtResource("21_upg_damage"), ExtResource("22_upg_multi"), ExtResource("23_upg_pierce"), ExtResource("24_upg_shield"), ExtResource("25_upg_shock")])
+upgrades = Array[ExtResource("16_36jdj")]([ExtResource("20_upg_fire"), ExtResource("21_upg_damage"), ExtResource("22_upg_multi"), ExtResource("23_upg_pierce"), ExtResource("24_upg_shield"), ExtResource("25_upg_shock"), ExtResource("26_upg_regen")])
 
 [node name="Player" type="CharacterBody2D" parent="."]
 script = ExtResource("2_eow3j")
@@ -54,6 +66,18 @@ texture = ExtResource("3_feb5d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_feb5d")
+
+[node name="HealthBar" type="ProgressBar" parent="Player"]
+offset_left = -35.0
+offset_top = -95.0
+offset_right = 35.0
+offset_bottom = -85.0
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_styles/background = SubResource("StyleBoxFlat_healthbar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_healthbar_fill")
+max_value = 100.0
+value = 100.0
+show_percentage = false
 
 [node name="Background" type="ParallaxBackground" parent="."]
 script = ExtResource("5_7jktm")

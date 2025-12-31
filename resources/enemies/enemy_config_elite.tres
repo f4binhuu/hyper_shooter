@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyConfig" load_steps=3 format=3 uid="uid://enemy_config_elite"]
+
+[ext_resource type="Script" path="res://resources/enemy_config.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/spr_enemy_lvl_3.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_script")
+tier = 2
+tier_name = "Elite"
+description = "Tanque elite com HP muito alto mas mais lento.
+Vira mini-boss nos níveis avançados."
+sprite = ExtResource("2_sprite")
+base_scale = 0.26
+base_color = Color(1, 1, 1, 1)
+base_health = 8
+base_speed = 150.0
+base_xp = 5
+base_points = 50
+health_per_level = 4.0
+speed_per_level = 10.0
+xp_per_level = 1.8
+points_per_level = 30
+knockback_resistance = 0.5
+can_dodge = false
+spawns_on_death = 0

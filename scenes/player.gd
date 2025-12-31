@@ -18,17 +18,18 @@ var has_shield = false
 var current_level: int = 1
 var current_xp: int = 0
 var xp_to_next_level: int = 10
-var xp_scaling: float = 1.3  # Cada level precisa de 30% mais XP
+var xp_scaling: float = 1.8  # Cada level precisa de 80% mais XP
 signal xp_gained(amount: int, current: int, required: int)
 signal level_up(new_level: int)
 
-# Health system
-var max_health: int = 3
-var current_health: int = 3
+# Health system (HP numérico de 100)
+var max_health: int = 100
+var current_health: int = 100
 var is_invincible: bool = false
 var invincibility_timer: float = 0.0
 var invincibility_duration: float = 1.0
-var health_regen_per_second: float = 0.0  # Regeneração de vida
+var health_regen_per_second: float = 0.5  # Regeneração de vida base (0.5 HP/s)
+var regen_accumulator: float = 0.0  # Acumula regen para mostrar floating text
 signal health_changed(current: int, maximum: int)
 signal player_died
 
@@ -46,7 +47,9 @@ signal combo_changed(count: int)
 
 @onready var bullet_scene = preload("res://scenes/bullet.tscn")
 @onready var shockwave_blast_scene = preload("res://assets/particles/shockwave_blast.tscn")
+@onready var floating_text_scene = preload("res://ui/floating_text.tscn")
 @onready var sprite = $Sprite2D
+@onready var health_bar = $HealthBar
 
 var propulsion_center
 var propulsion_left
@@ -68,6 +71,9 @@ func _ready():
 		invincibility_duration = game.game_config.player_invincibility_duration
 
 	health_changed.emit(current_health, max_health)
+
+	# Atualizar barra de vida após todos os nós estarem prontos
+	call_deferred("update_health_bar")
 
 	propulsion_center = preload("res://assets/particles/player_propulsion.tscn").instantiate()
 	add_child(propulsion_center)
@@ -109,13 +115,20 @@ func _physics_process(delta):
 	if shockwave_charge < 100.0:
 		shockwave_charge = min(shockwave_charge + (100.0 / shockwave_cooldown) * delta, 100.0)
 
-	# Regeneração de vida 
+	# Regeneração de vida
 	if health_regen_per_second > 0 and current_health < max_health:
 		var regen_amount = health_regen_per_second * delta
 		current_health = min(current_health + regen_amount, max_health)
-		# Emitir signal apenas se passou de um número inteiro
-		if int(current_health) != int(current_health - regen_amount):
+		regen_accumulator += regen_amount
+
+		# Emitir signal e mostrar floating text quando acumula 1 HP
+		if regen_accumulator >= 1.0:
+			var healed = int(regen_accumulator)
+			regen_accumulator -= healed
 			health_changed.emit(int(current_health), max_health)
+			update_health_bar()
+			# Mostrar floating text verde de cura
+			spawn_floating_text("+" + str(healed), Color(0.3, 1.0, 0.3), 28)
 
 	# Atualizar combo timer
 	if combo_count > 0:
@@ -387,12 +400,46 @@ func get_combo_multiplier() -> float:
 		return 3.0
 
 # Health system functions
+## Atualiza a barra de vida visual
+func update_health_bar():
+	if not health_bar or not is_instance_valid(health_bar):
+		return
+
+	health_bar.max_value = max_health
+	health_bar.value = current_health
+
+	# Cor da barra baseada na porcentagem de vida (verde -> amarelo -> vermelho)
+	var health_percent = float(current_health) / float(max_health) if max_health > 0 else 0.0
+	var bar_color: Color
+
+	if health_percent > 0.6:
+		# Verde para amarelo
+		bar_color = Color(0.2 + (1.0 - health_percent) * 2.0, 0.8, 0.2)
+	elif health_percent > 0.3:
+		# Amarelo para laranja
+		bar_color = Color(1.0, 0.8 - (0.6 - health_percent) * 2.0, 0.2)
+	else:
+		# Laranja para vermelho
+		bar_color = Color(1.0, 0.2 * (health_percent / 0.3), 0.2)
+
+	# Atualizar o estilo da barra dinamicamente
+	var style_box = health_bar.get_theme_stylebox("fill")
+	if style_box:
+		style_box = style_box.duplicate()
+		if style_box is StyleBoxFlat:
+			style_box.bg_color = bar_color
+			health_bar.add_theme_stylebox_override("fill", style_box)
+
 func take_damage(amount: int):
 	if is_invincible or current_health <= 0:
 		return
 
-	current_health -= amount
+	current_health = max(0, current_health - amount)
 	health_changed.emit(current_health, max_health)
+	update_health_bar()
+
+	# Mostrar floating text de dano
+	spawn_floating_text("-" + str(amount), Color(1, 0.3, 0.3), 32)
 
 	print("Player levou ", amount, " de dano! HP: ", current_health, "/", max_health)
 
@@ -450,3 +497,10 @@ func level_up_player():
 
 	# Emitir signal de level up
 	level_up.emit(current_level)
+
+## Helper function para criar floating text
+func spawn_floating_text(value: String, color: Color, size: int):
+	var text = floating_text_scene.instantiate()
+	text.position = position + Vector2(randf_range(-20, 20), -30)
+	get_parent().add_child(text)
+	text.setup(value, color, size)

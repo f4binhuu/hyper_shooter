@@ -40,14 +40,7 @@ func _process(delta: float) -> void:
 			if game and game.current_wave:
 				wave_text = "WAVE " + str(game.current_wave.wave_number) + "\n"
 
-			# Adicionar HP
-			var hp_text = ""
-			if "current_health" in player and "max_health" in player:
-				# Usar corações para representar vida
-				var hearts = ""
-				for i in range(player.current_health):
-					hearts += "❤️"
-				hp_text = "HP: " + hearts + " (" + str(player.current_health) + "/" + str(player.max_health) + ")\n"
+			# HP agora é exibido na barra de vida do player, não precisa mais mostrar aqui
 
 			# Adicionar indicador de shield
 			var shield_text = ""
@@ -65,7 +58,7 @@ func _process(delta: float) -> void:
 				var multiplier = player.get_combo_multiplier()
 				combo_text = "\nCOMBO x" + str(player.combo_count) + " (" + str(multiplier) + "x)"
 
-			text = wave_text + level_text + hp_text + "SCORE: " + str(player.power) + shield_text + "\nSHOCKWAVE: " + str(charge_percent) + "%" + combo_text
+			text = wave_text + level_text + "SCORE: " + str(player.power) + shield_text + "\nSHOCKWAVE: " + str(charge_percent) + "%" + combo_text
 
 			# Mudar cor baseado no combo, shield e carga
 			if "combo_count" in player and player.combo_count > 1:
