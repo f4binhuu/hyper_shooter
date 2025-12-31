@@ -8,6 +8,7 @@ extends Node2D
 @onready var game_over_screen_scene = preload("res://ui/game_over_screen.tscn")
 
 @export var game_config: GameConfig
+@export var audio_config: AudioConfig
 @export var waves: Array[WaveConfig] = []
 @export var multipliers: Array[MultiplierConfig] = []
 @export var upgrades: Array[UpgradeConfig] = []
@@ -33,13 +34,24 @@ func _ready() -> void:
 		push_error("ERRO: GameConfig não configurado! Adicione um game_config.tres no Inspector.")
 		return
 
+	# Carregar audio_config automaticamente se não estiver configurado
+	if not audio_config:
+		audio_config = load("res://resources/audio_config.tres")
+		if audio_config:
+			print("AudioConfig carregado automaticamente")
+
 	next_upgrade_at = game_config.upgrade_point_threshold
 
-	# Conectar ao sinal de morte do player
+	# Conectar ao sinal de morte do player e configurar audio
 	var player = get_tree().get_first_node_in_group("player")
-	if player and player.has_signal("player_died"):
-		player.player_died.connect(on_player_died)
-		print("Game conectado ao sinal de morte do player")
+	if player:
+		# Passar audio_config para o player
+		if audio_config:
+			player.audio_config = audio_config
+
+		if player.has_signal("player_died"):
+			player.player_died.connect(on_player_died)
+			print("Game conectado ao sinal de morte do player")
 
 	# Conectar ao combo do player para trackear max combo
 	if player and player.has_signal("combo_changed"):
@@ -127,6 +139,10 @@ func spawn_enemies():
 		# Escolher tipo de inimigo baseado nas chances da wave
 		var enemy_scene = choose_enemy_type()
 		var enemy = enemy_scene.instantiate()
+
+		# Passar audio_config para o inimigo
+		if audio_config:
+			enemy.audio_config = audio_config
 
 		var spawn_x = randf_range(50, get_viewport_rect().size.x - 50)
 		enemy.position = Vector2(spawn_x, -50)
@@ -257,6 +273,11 @@ func show_upgrade_screen():
 	# Mostrar UI de seleção
 	var ui = upgrade_ui_scene.instantiate()
 	ui.process_mode = Node.PROCESS_MODE_ALWAYS  # Funciona mesmo com jogo pausado
+
+	# Passar audio_config para a UI
+	if audio_config:
+		ui.audio_config = audio_config
+
 	add_child(ui)
 
 	# Passar upgrades e níveis atuais do player

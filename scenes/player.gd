@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var shockwave_cooldown = 5.0
 @export var shockwave_charge_per_kill = 15.0
 @export var shockwave_radius = 600.0
+@export var audio_config: AudioConfig
 
 var power = 20  # Mantido para compatibilidade com score
 var shockwave_charge = 0.0
@@ -50,6 +51,8 @@ signal combo_changed(count: int)
 var propulsion_center
 var propulsion_left
 var propulsion_right
+var shoot_sound: AudioStreamPlayer
+var shockwave_sound: AudioStreamPlayer
 
 var can_shoot = true
 var previous_x = 0.0
@@ -83,7 +86,7 @@ func _ready():
 	propulsion_right.position = Vector2(73, 20)
 	propulsion_right.scale = Vector2(0.3, 0.3)
 	propulsion_right.z_index = -1
-	
+
 	var viewport_height = get_viewport_rect().size.y
 	target_y = viewport_height - 200
 	position = Vector2(360, target_y)
@@ -138,6 +141,17 @@ func _physics_process(delta):
 func activate_shockwave():
 	shockwave_charge = 0.0
 
+	# Criar e tocar som de shockwave (lazy initialization)
+	if audio_config and not shockwave_sound:
+		shockwave_sound = AudioHelper.create_player(
+			audio_config.shockwave_sound,
+			audio_config.shockwave_volume,
+			self
+		)
+
+	if shockwave_sound:
+		shockwave_sound.play()
+
 	# Flash branco super intenso no player
 	sprite.modulate = Color(5, 5, 5, 1)
 	await get_tree().create_timer(0.08).timeout
@@ -163,6 +177,17 @@ func activate_shockwave():
 
 func shoot():
 	var total_bullets = 1 + extra_bullets
+
+	# Criar e tocar som de tiro (lazy initialization)
+	if audio_config and not shoot_sound:
+		shoot_sound = AudioHelper.create_player(
+			audio_config.player_shoot_sound,
+			audio_config.player_shoot_volume,
+			self
+		)
+
+	if shoot_sound:
+		shoot_sound.play()
 
 	# Calcular ângulos do leque
 	if total_bullets == 1:
@@ -266,6 +291,14 @@ func nuke_all_enemies():
 			# Dar pontos por cada inimigo (metade do normal pois não matou manualmente)
 			if "points_value" in enemy:
 				power += int(enemy.points_value * 0.5)
+
+			# Tocar som de morte
+			if audio_config and "audio_config" in enemy:
+				AudioHelper.play_sound(
+					audio_config.enemy_death_sound,
+					audio_config.enemy_death_volume,
+					self
+				)
 
 			# Spawnar partículas de morte
 			if enemy.has_method("spawn_death_particles"):

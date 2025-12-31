@@ -7,6 +7,7 @@ extends Area2D
 @export var xp_value = 1  # XP que dropa ao morrer
 @export var max_health = 1
 @export var knockback_force = 250.0
+@export var audio_config: AudioConfig
 
 @onready var sprite = $Sprite2D
 @onready var death_particles = preload("res://assets/particles/enemy_death.tscn")
@@ -18,6 +19,8 @@ var previous_x = 0.0
 var knockback_velocity = Vector2.ZERO
 var is_frozen = false
 var original_speed = 0.0
+var hit_sound: AudioStreamPlayer
+var death_sound: AudioStreamPlayer
 
 func _ready():
 	add_to_group("enemies")
@@ -26,6 +29,20 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 	previous_x = position.x
 	original_speed = speed
+
+	# Criar sons de hit e morte
+	if audio_config:
+		hit_sound = AudioHelper.create_player(
+			audio_config.enemy_hit_sound,
+			audio_config.enemy_hit_volume,
+			self
+		)
+
+		death_sound = AudioHelper.create_player(
+			audio_config.enemy_death_sound,
+			audio_config.enemy_death_volume,
+			self
+		)
 
 
 func _physics_process(delta):
@@ -80,15 +97,20 @@ func _on_area_entered(area):
 			if area.has_method("destroy"):
 				area.destroy()
 
-func take_damage(amount: int):
+func take_damage(amount: int, show_text: bool = true):
 	health -= amount
 
 	# Spawn floating damage text
-	spawn_floating_text("-" + str(amount), Color.WHITE, 28)
+	if show_text:
+		spawn_floating_text("-" + str(amount), Color.WHITE, 28)
 
 	if health <= 0:
 		die()
 	else:
+		# Tocar som de hit (não morreu)
+		if hit_sound:
+			hit_sound.play()
+
 		var original_modulate = sprite.modulate
 		# Flash de dano mais intenso
 		sprite.modulate = Color(2.0, 2.0, 2.0)
@@ -97,6 +119,14 @@ func take_damage(amount: int):
 
 func die():
 	var player = get_tree().get_first_node_in_group("player")
+
+	# Tocar som de morte (AudioStreamPlayer separado que não será destruído com o inimigo)
+	if audio_config:
+		AudioHelper.play_sound(
+			audio_config.enemy_death_sound,
+			audio_config.enemy_death_volume,
+			get_parent()
+		)
 
 	if player:
 		# Dar XP diretamente ao player
@@ -126,26 +156,21 @@ func hit_by_shockwave(damage: int, player_pos: Vector2):
 	if health <= 0:
 		return
 
+	# Calcular direção do knockback
+	var knockback_direction = (position - player_pos).normalized()
+	knockback_velocity = knockback_direction * knockback_force
+
+	# Se vai morrer, dar bonus de power
 	if damage >= health:
-		# Mata o inimigo - dá power em dobro
 		var bonus_points = points_value * 2
 		var player = get_tree().get_first_node_in_group("player")
 		if player:
 			player.power += bonus_points
 			player.add_boost_charge(player.shockwave_charge_per_kill * 0.5)
-			print("SHOCKWAVE KILL! Inimigo LVL 1 destruído! Player ganhou +", bonus_points, " | Força total: ", player.power)
+			print("SHOCKWAVE KILL! Inimigo destruído! Player ganhou +", bonus_points, " | Força total: ", player.power)
 
-		spawn_death_particles()
-		queue_free()
-	else:
-		# Causa dano e empurra
-		take_damage(damage)
-
-		# Calcular direção do knockback
-		var knockback_direction = (position - player_pos).normalized()
-		knockback_velocity = knockback_direction * knockback_force
-
-		print("Inimigo levou ", damage, " de dano! Vida restante: ", health)
+	# Usar função centralizada de dano (que já toca sons, mostra texto e mata se necessário)
+	take_damage(damage)
 
 func _on_body_entered(body):
 	if body.name == "Player":
