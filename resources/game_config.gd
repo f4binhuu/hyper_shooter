@@ -18,3 +18,8 @@ class_name GameConfig
 
 @export_group("Wave System")
 @export var loop_waves: bool = true  ## Repetir waves quando acabar
+
+@export_group("Player Health")
+@export_range(1, 10) var player_max_health: int = 3  ## Vida máxima do player
+@export_range(0.5, 3.0, 0.1) var player_invincibility_duration: float = 1.0  ## Duração dos iframes após dano (segundos)
+@export_range(1, 5) var enemy_contact_damage: int = 1  ## Dano que inimigos causam ao colidir com player

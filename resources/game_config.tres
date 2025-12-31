@@ -12,3 +12,6 @@ enemy_health_multiplier = 1.0
 enemy_speed_multiplier = 1.0
 enemy_points_multiplier = 1.0
 loop_waves = true
+player_max_health = 3
+player_invincibility_duration = 1.0
+enemy_contact_damage = 1

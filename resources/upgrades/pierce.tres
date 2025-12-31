@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="UpgradeConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="UpgradeConfig" load_steps=2 format=3 uid="uid://lr30q7xuukfg"]
 
-[ext_resource type="Script" uid="uid://b56rdhgve2rol" path="res://resources/upgrade_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://e204pbp7dufu" path="res://resources/upgrade_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
@@ -8,6 +8,7 @@ upgrade_type = 3
 display_name = "Pierce"
 description = "Bullets pierce through enemies (loses 50% damage per enemy)"
 icon_color = Color(0.3, 0.8, 1, 1)
+rarity = 1
 base_value = 1.0
 increment_per_level = 1.0
 max_level = 5

@@ -4,6 +4,7 @@ extends Area2D
 @export var tilt_amount = 10.0
 @export var tilt_speed = 3.0
 @export var points_value = 10
+@export var xp_value = 1  # XP que dropa ao morrer
 @export var max_health = 1
 @export var knockback_force = 250.0
 
@@ -49,6 +50,14 @@ func _on_area_entered(area):
 		if "damage" in area:
 			bullet_damage = area.damage
 
+		# Aplicar knockback baseado na direção do bullet
+		if "velocity" in area:
+			var knockback_direction = -area.velocity.normalized()
+			knockback_velocity = knockback_direction * knockback_force
+		else:
+			# Se bullet não tem velocity, empurra para cima
+			knockback_velocity = Vector2(0, -knockback_force)
+
 		take_damage(bullet_damage)
 
 		# Spawn hit impact particles
@@ -87,18 +96,20 @@ func take_damage(amount: int):
 		sprite.modulate = original_modulate
 
 func die():
-	# Dar pontos e carga de shockwave ao player
 	var player = get_tree().get_first_node_in_group("player")
+
 	if player:
-		var points_earned = points_value
+		# Dar XP diretamente ao player
+		if player.has_method("collect_xp"):
+			player.collect_xp(xp_value)
 
-		# Aplicar multiplicador de combo se tiver
-		if player.has_method("get_combo_multiplier"):
-			var multiplier = player.get_combo_multiplier()
-			points_earned = int(points_value * multiplier)
+		# Mostrar texto flutuante com XP ganho NO PLAYER (DOPAMINA!)
+		var text = floating_text_scene.instantiate()
+		text.position = player.position + Vector2(randf_range(-30, 30), -40)  # Um pouco acima do player
+		get_parent().add_child(text)
+		text.setup("+" + str(xp_value), Color(1, 0.9, 0.2, 1), 48)
 
-		player.power += points_earned
-
+		# Adicionar carga de shockwave
 		if player.has_method("add_boost_charge"):
 			player.add_boost_charge(player.shockwave_charge_per_kill)
 
@@ -106,11 +117,7 @@ func die():
 		if player.has_method("register_kill"):
 			player.register_kill()
 
-		# Spawn floating text GRANDE com pontos ganhos
-		var text_color = Color.GREEN if points_earned == points_value else Color(1, 0.8, 0)  # Laranja se combo
-		spawn_floating_text("+" + str(points_earned), text_color, 40)
-
-		print("Inimigo morto! Player ganhou +", points_earned, " | Força total: ", player.power)
+		print("Inimigo morto! Player ganhou ", xp_value, " XP")
 
 	spawn_death_particles()
 	queue_free()
@@ -143,8 +150,16 @@ func hit_by_shockwave(damage: int, player_pos: Vector2):
 func _on_body_entered(body):
 	if body.name == "Player":
 		# Inimigo causa dano ao player
-		body.power -= points_value
-		print("Player atingido! Perdeu -", points_value, " | Força total: ", body.power)
+		if body.has_method("take_damage"):
+			# Buscar dano configurado no game manager
+			var game = get_parent()
+			var damage = 1  # default
+			if game and game.game_config:
+				damage = game.game_config.enemy_contact_damage
+
+			body.take_damage(damage)
+			print("Inimigo colidiu com player! Causou ", damage, " de dano")
+
 		spawn_death_particles()
 		queue_free()
 

@@ -3,15 +3,33 @@ extends CharacterBody2D
 @export var fire_rate = 0.5
 @export var tilt_amount = 10.0
 @export var tilt_speed = 5.0
-@export var shockwave_damage = 5
+@export var shockwave_damage = 2
 @export var shockwave_cooldown = 5.0
 @export var shockwave_charge_per_kill = 15.0
 @export var shockwave_radius = 600.0
 
-var power = 20
+var power = 20  # Mantido para compatibilidade com score
 var shockwave_charge = 0.0
 var target_y = 0.0
 var has_shield = false
+
+# XP and Level system
+var current_level: int = 1
+var current_xp: int = 0
+var xp_to_next_level: int = 10
+var xp_scaling: float = 1.3  # Cada level precisa de 30% mais XP
+signal xp_gained(amount: int, current: int, required: int)
+signal level_up(new_level: int)
+
+# Health system
+var max_health: int = 3
+var current_health: int = 3
+var is_invincible: bool = false
+var invincibility_timer: float = 0.0
+var invincibility_duration: float = 1.0
+var health_regen_per_second: float = 0.0  # Regeneração de vida
+signal health_changed(current: int, maximum: int)
+signal player_died
 
 # Upgrade tracking
 var upgrade_levels = {}
@@ -38,6 +56,15 @@ var previous_x = 0.0
 
 func _ready():
 	add_to_group("player")
+
+	# Buscar configs de HP do game manager
+	var game = get_parent()
+	if game and game.game_config:
+		max_health = game.game_config.player_max_health
+		current_health = max_health
+		invincibility_duration = game.game_config.player_invincibility_duration
+
+	health_changed.emit(current_health, max_health)
 
 	propulsion_center = preload("res://assets/particles/player_propulsion.tscn").instantiate()
 	add_child(propulsion_center)
@@ -69,8 +96,23 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ui_accept") and shockwave_charge >= 100.0:
 		activate_shockwave()
 
+	# Atualizar timer de invencibilidade
+	if is_invincible:
+		invincibility_timer -= delta
+		if invincibility_timer <= 0:
+			is_invincible = false
+			sprite.modulate = Color(1, 1, 1, 1)  # Volta cor normal
+
 	if shockwave_charge < 100.0:
 		shockwave_charge = min(shockwave_charge + (100.0 / shockwave_cooldown) * delta, 100.0)
+
+	# Regeneração de vida 
+	if health_regen_per_second > 0 and current_health < max_health:
+		var regen_amount = health_regen_per_second * delta
+		current_health = min(current_health + regen_amount, max_health)
+		# Emitir signal apenas se passou de um número inteiro
+		if int(current_health) != int(current_health - regen_amount):
+			health_changed.emit(int(current_health), max_health)
 
 	# Atualizar combo timer
 	if combo_count > 0:
@@ -280,6 +322,10 @@ func apply_upgrade(config: UpgradeConfig):
 			shockwave_damage += int(value)
 			print("Novo dano de shockwave: ", shockwave_damage)
 
+		UpgradeConfig.UpgradeType.HEALTH_REGEN:
+			health_regen_per_second += value
+			print("Regeneração de vida: ", health_regen_per_second, " HP/s")
+
 # Combo system functions
 func register_kill():
 	combo_count += 1
@@ -306,3 +352,68 @@ func get_combo_multiplier() -> float:
 		return 2.5
 	else:
 		return 3.0
+
+# Health system functions
+func take_damage(amount: int):
+	if is_invincible or current_health <= 0:
+		return
+
+	current_health -= amount
+	health_changed.emit(current_health, max_health)
+
+	print("Player levou ", amount, " de dano! HP: ", current_health, "/", max_health)
+
+	if current_health <= 0:
+		die()
+	else:
+		# Ativar invencibilidade temporária
+		is_invincible = true
+		invincibility_timer = invincibility_duration
+
+		# Efeito visual de piscar (vermelho)
+		start_invincibility_visual()
+
+func start_invincibility_visual():
+	# Criar efeito de piscar alternando entre branco e vermelho
+	var tween = create_tween()
+	tween.set_loops(int(invincibility_duration * 5))  # 5 piscadas por segundo
+	tween.tween_property(sprite, "modulate", Color(1, 0.3, 0.3, 0.5), 0.1)
+	tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.1)
+
+func die():
+	print("=== PLAYER MORREU ===")
+	player_died.emit()
+
+	# Desabilitar controles
+	set_physics_process(false)
+
+	# Efeito visual de morte
+	sprite.modulate = Color(0.5, 0.5, 0.5, 0.5)
+
+# XP and Level system functions
+func collect_xp(amount: int):
+	current_xp += amount
+	power += amount  # Manter score também para compatibilidade
+
+	print("XP coletado: +", amount, " | Total: ", current_xp, "/", xp_to_next_level)
+
+	# Emitir signal de ganho de XP
+	xp_gained.emit(amount, current_xp, xp_to_next_level)
+
+	# Verificar se subiu de level
+	if current_xp >= xp_to_next_level:
+		level_up_player()
+
+func level_up_player():
+	current_level += 1
+	current_xp -= xp_to_next_level  # XP excedente vai para próximo level
+
+	# Calcular XP necessário para próximo level (scaling exponencial)
+	xp_to_next_level = int(xp_to_next_level * xp_scaling)
+
+	print("=== LEVEL UP! ===")
+	print("Level: ", current_level)
+	print("Próximo level: ", xp_to_next_level, " XP")
+
+	# Emitir signal de level up
+	level_up.emit(current_level)

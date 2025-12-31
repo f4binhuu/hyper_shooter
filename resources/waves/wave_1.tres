@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+wave_number = 1
 wave_description = "Wave 1 - Tutorial
 Inimigos fracos para você se acostumar"
 spawn_interval = 1.5

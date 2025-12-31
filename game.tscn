@@ -1,34 +1,34 @@
 [gd_scene load_steps=32 format=3 uid="uid://drgo5ls7e4722"]
 
-[ext_resource type="Script" uid="uid://bx0xt6daevqu6" path="res://scripts/game.gd" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://glivlkdmjh2" path="res://scripts/game.gd" id="1_e2o6t"]
 [ext_resource type="Resource" path="res://resources/game_config.tres" id="1_game_config"]
-[ext_resource type="Script" uid="uid://mdcfq72v8ucp" path="res://resources/wave_config.gd" id="2_5b14r"]
-[ext_resource type="Script" uid="uid://dh7fh85ku4k5v" path="res://scenes/player.gd" id="2_eow3j"]
+[ext_resource type="Script" uid="uid://b8mkk6yyvso4w" path="res://resources/wave_config.gd" id="2_5b14r"]
+[ext_resource type="Script" uid="uid://b86n7ohi5ejma" path="res://scenes/player.gd" id="2_eow3j"]
 [ext_resource type="Texture2D" uid="uid://b020o7pqoc7bt" path="res://assets/sprites/spr_player.png" id="3_feb5d"]
 [ext_resource type="Texture2D" uid="uid://b71tr2q4msua2" path="res://assets/backgrounds/bg_v2_1.png" id="4_fc0e3"]
 [ext_resource type="Script" uid="uid://bf53pa8gtl8m" path="res://assets/backgrounds/background.gd" id="5_7jktm"]
 [ext_resource type="Texture2D" uid="uid://b6iuoayx08in1" path="res://assets/backgrounds/bg_v3_2.png" id="6_ryrav"]
 [ext_resource type="Script" uid="uid://wcxsx6mucgdh" path="res://ui/power_label.gd" id="7_eow3j"]
-[ext_resource type="Script" uid="uid://dydn8fncywmlf" path="res://resources/multiplier_config.gd" id="8_bnpwn"]
-[ext_resource type="Resource" path="res://resources/waves/wave_1.tres" id="8_wave1"]
-[ext_resource type="Resource" path="res://resources/waves/wave_2.tres" id="9_wave2"]
-[ext_resource type="Resource" path="res://resources/waves/wave_3.tres" id="10_wave3"]
-[ext_resource type="Resource" path="res://resources/waves/wave_4.tres" id="11_wave4"]
-[ext_resource type="Resource" path="res://resources/waves/wave_5.tres" id="12_wave5"]
+[ext_resource type="Script" uid="uid://df3gwhk4albpy" path="res://resources/multiplier_config.gd" id="8_bnpwn"]
+[ext_resource type="Resource" uid="uid://bk6fcd5daha7m" path="res://resources/waves/wave_1.tres" id="8_wave1"]
+[ext_resource type="Resource" uid="uid://djfb4shoxtyse" path="res://resources/waves/wave_2.tres" id="9_wave2"]
+[ext_resource type="Resource" uid="uid://dh7tufrowc1ka" path="res://resources/waves/wave_3.tres" id="10_wave3"]
+[ext_resource type="Resource" uid="uid://guh6nq0gadrv" path="res://resources/waves/wave_4.tres" id="11_wave4"]
+[ext_resource type="Resource" uid="uid://ue0j0rwrr5lv" path="res://resources/waves/wave_5.tres" id="12_wave5"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_x3.tres" id="13_mult_x3"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_x2.tres" id="14_mult_x2"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_add100.tres" id="15_mult_add100"]
-[ext_resource type="Script" uid="uid://b56rdhgve2rol" path="res://resources/upgrade_config.gd" id="16_36jdj"]
+[ext_resource type="Script" uid="uid://e204pbp7dufu" path="res://resources/upgrade_config.gd" id="16_36jdj"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_div2.tres" id="16_mult_div2"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_sub100.tres" id="17_mult_sub100"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_shield.tres" id="18_mult_shield"]
 [ext_resource type="Resource" path="res://resources/multipliers/mult_nuke.tres" id="19_mult_nuke"]
-[ext_resource type="Resource" path="res://resources/upgrades/fire_rate.tres" id="20_upg_fire"]
-[ext_resource type="Resource" path="res://resources/upgrades/damage.tres" id="21_upg_damage"]
-[ext_resource type="Resource" path="res://resources/upgrades/multi_shot.tres" id="22_upg_multi"]
-[ext_resource type="Resource" path="res://resources/upgrades/pierce.tres" id="23_upg_pierce"]
-[ext_resource type="Resource" path="res://resources/upgrades/shield.tres" id="24_upg_shield"]
-[ext_resource type="Resource" path="res://resources/upgrades/shockwave.tres" id="25_upg_shock"]
+[ext_resource type="Resource" uid="uid://bjg2oeeholjmq" path="res://resources/upgrades/fire_rate.tres" id="20_upg_fire"]
+[ext_resource type="Resource" uid="uid://cwcj52tksabec" path="res://resources/upgrades/damage.tres" id="21_upg_damage"]
+[ext_resource type="Resource" uid="uid://dmtou8fph2j4s" path="res://resources/upgrades/multi_shot.tres" id="22_upg_multi"]
+[ext_resource type="Resource" uid="uid://lr30q7xuukfg" path="res://resources/upgrades/pierce.tres" id="23_upg_pierce"]
+[ext_resource type="Resource" uid="uid://elkw1v3siok6" path="res://resources/upgrades/shield.tres" id="24_upg_shield"]
+[ext_resource type="Resource" uid="uid://cib8yn86hvm26" path="res://resources/upgrades/shockwave.tres" id="25_upg_shock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feb5d"]
 size = Vector2(32, 32)
@@ -59,15 +59,13 @@ shape = SubResource("RectangleShape2D_feb5d")
 script = ExtResource("5_7jktm")
 
 [node name="GalaxyLayer" type="ParallaxLayer" parent="Background"]
-motion_scale = Vector2(1, 0)
+motion_scale = Vector2(1, 0.2)
 motion_mirroring = Vector2(0, 1280)
 
 [node name="Sprite2D" type="Sprite2D" parent="Background/GalaxyLayer"]
 z_index = -100
-texture_filter = 1
-texture_repeat = 3
-position = Vector2(360, 640)
-scale = Vector2(2, 2)
+position = Vector2(361.5, 588)
+scale = Vector2(1.5317796, 1.2225405)
 texture = ExtResource("4_fc0e3")
 
 [node name="ParticlesLayer" type="ParallaxLayer" parent="Background"]
