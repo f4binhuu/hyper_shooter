@@ -9,7 +9,8 @@ enum SoundType {
 	UPGRADE_COMMON,
 	UPGRADE_UNCOMMON,
 	UPGRADE_RARE,
-	UPGRADE_EPIC
+	UPGRADE_EPIC,
+	BACKGROUND_MUSIC
 }
 
 # === PLAYER SOUNDS ===
@@ -42,6 +43,11 @@ enum SoundType {
 @export var upgrade_epic_sound: AudioStream
 @export var upgrade_epic_volume: float = 0.0
 
+# === MUSIC ===
+@export_group("Music")
+@export var background_music: AudioStream
+@export var background_music_volume: float = -10.0
+
 # Helper functions para acessar via enum
 func get_sound(type: SoundType) -> AudioStream:
 	match type:
@@ -61,6 +67,8 @@ func get_sound(type: SoundType) -> AudioStream:
 			return upgrade_rare_sound
 		SoundType.UPGRADE_EPIC:
 			return upgrade_epic_sound
+		SoundType.BACKGROUND_MUSIC:
+			return background_music
 		_:
 			return null
 
@@ -82,5 +90,7 @@ func get_volume(type: SoundType) -> float:
 			return upgrade_rare_volume
 		SoundType.UPGRADE_EPIC:
 			return upgrade_epic_volume
+		SoundType.BACKGROUND_MUSIC:
+			return background_music_volume
 		_:
 			return 0.0

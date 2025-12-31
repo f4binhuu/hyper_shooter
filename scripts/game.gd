@@ -9,12 +9,14 @@ extends Node2D
 
 @export var game_config: GameConfig
 @export var audio_config: AudioConfig
-@export var waves: Array[WaveConfig] = []
 @export var multipliers: Array[MultiplierConfig] = []
 @export var upgrades: Array[UpgradeConfig] = []
 
+# Waves geradas proceduralmente (não mais @export)
+var waves: Array[WaveConfig] = []
 var current_wave_index: int = 0
 var current_wave: WaveConfig
+var is_boss_wave: bool = false  # Flag para wave atual (futuro: boss fights)
 var wave_timer: float = 0.0
 var spawn_timer: float = 0.0
 var multiplier_timer: float = 0.0
@@ -24,6 +26,7 @@ var last_power_check: int = 0
 var is_transitioning_wave: bool = false
 var is_game_over: bool = false
 var max_combo_reached: int = 0
+var music_player: AudioStreamPlayer
 
 signal wave_started(wave_number: int)
 signal wave_completed(wave_number: int)
@@ -57,15 +60,31 @@ func _ready() -> void:
 	if player and player.has_signal("combo_changed"):
 		player.combo_changed.connect(_on_combo_changed)
 
-	# Conectar ao level_up do player 
+	# Conectar ao level_up do player
 	if player and player.has_signal("level_up"):
 		player.level_up.connect(on_player_level_up)
 		print("Game conectado ao sinal de level_up do player")
 
-	if waves.size() > 0:
-		start_wave(0)
-	else:
-		print("AVISO: Nenhuma wave configurada! Adicione waves no Inspector.")
+	# Iniciar música de fundo
+	if audio_config:
+		var music_stream = audio_config.get_sound(AudioConfig.SoundType.BACKGROUND_MUSIC)
+		if music_stream:
+			music_player = AudioStreamPlayer.new()
+			music_player.stream = music_stream
+			music_player.volume_db = audio_config.get_volume(AudioConfig.SoundType.BACKGROUND_MUSIC)
+			music_player.autoplay = false
+			music_player.process_mode = Node.PROCESS_MODE_ALWAYS  # Continua tocando mesmo quando o jogo pausa
+			add_child(music_player)
+
+			# Configurar loop para MP3
+			if music_stream is AudioStreamMP3:
+				music_stream.loop = true
+
+			music_player.play()
+			print("Background music iniciada")
+
+	# Iniciar primeira wave (será gerada proceduralmente)
+	start_wave(0)
 
 func _process(delta):
 	if not current_wave or is_game_over:
@@ -93,20 +112,45 @@ func _process(delta):
 
 	# check_upgrade_threshold()
 
-func start_wave(wave_index: int):
-	if wave_index >= waves.size():
-		if game_config.loop_waves:
-			wave_index = 0  # Reinicia do começo
-		else:
-			print("Todas as waves completadas!")
-			return
+## Obtém wave existente ou gera uma nova proceduralmente
+## Preparado para suporte a boss waves no futuro
+func get_or_generate_wave(wave_index: int) -> WaveConfig:
+	# Se wave já foi gerada anteriormente, retornar do cache
+	if wave_index < waves.size():
+		return waves[wave_index]
 
+	var wave_number = wave_index + 1
+
+	# TODO FUTURO: Inserir lógica de boss waves aqui
+	# if game_config and WaveGenerator.should_spawn_boss(wave_number, game_config.boss_every_n_waves):
+	#     is_boss_wave = true
+	#     return create_boss_wave(wave_number)
+
+	# Wave normal - gerar proceduralmente
+	is_boss_wave = false
+	var new_wave = WaveGenerator.generate_wave(wave_number)
+	waves.append(new_wave)
+
+	print("Wave ", wave_number, " gerada: spawn_interval=", new_wave.spawn_interval,
+		  "s, enemies/spawn=", new_wave.enemies_per_spawn,
+		  ", lvl1=", snappedf(new_wave.enemy_lvl_1_chance * 100, 0.1), "%",
+		  ", lvl2=", snappedf(new_wave.enemy_lvl_2_chance * 100, 0.1), "%",
+		  ", lvl3=", snappedf(new_wave.enemy_lvl_3_chance * 100, 0.1), "%")
+
+	return new_wave
+
+func start_wave(wave_index: int):
 	current_wave_index = wave_index
-	current_wave = waves[wave_index]
+	current_wave = get_or_generate_wave(wave_index)
 	wave_timer = 0.0
 	spawn_timer = 0.0
 	enemies_killed_this_wave = 0
 	is_transitioning_wave = false  # Reset flag ao iniciar nova wave
+
+	# TODO FUTURO: Lógica específica para boss waves
+	# if is_boss_wave:
+	#     prepare_boss_battle()
+	#     return
 
 	wave_started.emit(current_wave.wave_number)
 	print("=== WAVE ", current_wave.wave_number, " INICIADA ===")
@@ -120,6 +164,11 @@ func complete_wave():
 	is_transitioning_wave = true
 	wave_completed.emit(current_wave.wave_number)
 	print("=== WAVE ", current_wave.wave_number, " COMPLETADA ===")
+
+	# TODO FUTURO: Recompensas extras para boss waves
+	# if is_boss_wave:
+	#     give_boss_rewards()
+	#     show_boss_victory_screen()
 
 	# Pequeno delay antes da próxima wave
 	await get_tree().create_timer(2.0).timeout

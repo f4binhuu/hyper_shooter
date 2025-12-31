@@ -1,14 +1,15 @@
-[gd_resource type="Resource" script_class="AudioConfig" load_steps=10 format=3 uid="uid://audio_config_001"]
+[gd_resource type="Resource" script_class="AudioConfig" load_steps=11 format=3 uid="uid://audio_config_001"]
 
 [ext_resource type="Script" path="res://resources/audio_config.gd" id="1_audio_script"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-short-laser-gun-shot-1670.wav" id="2_player_shoot"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-sword-slash-swoosh-1476.mp3" id="3_shockwave"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-body-punch-quick-hit-2153.wav" id="4_enemy_hit"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-arrow-whoosh-1491.wav" id="5_enemy_death"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-achievement-completed-2068.wav" id="6_upgrade_common"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-completion-of-a-level-2063.wav" id="7_upgrade_uncommon"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-game-experience-level-increased-2062.wav" id="8_upgrade_rare"]
-[ext_resource type="AudioStream" path="res://assets/sfx/mixkit-achievement-win-drums-555.wav" id="9_upgrade_epic"]
+[ext_resource type="AudioStream" path="res://assets/sfx/player_shoot.wav" id="2_player_shoot"]
+[ext_resource type="AudioStream" path="res://assets/sfx/shockwave.mp3" id="3_shockwave"]
+[ext_resource type="AudioStream" path="res://assets/sfx/enemy_hit.wav" id="4_enemy_hit"]
+[ext_resource type="AudioStream" path="res://assets/sfx/enemy_death.wav" id="5_enemy_death"]
+[ext_resource type="AudioStream" path="res://assets/sfx/upgrade_common.wav" id="6_upgrade_common"]
+[ext_resource type="AudioStream" path="res://assets/sfx/upgrade_uncommon.wav" id="7_upgrade_uncommon"]
+[ext_resource type="AudioStream" path="res://assets/sfx/upgrade_rare.wav" id="8_upgrade_rare"]
+[ext_resource type="AudioStream" path="res://assets/sfx/upgrade_epic.wav" id="9_upgrade_epic"]
+[ext_resource type="AudioStream" path="res://assets/sfx/background_music.mp3" id="10_background_music"]
 
 [resource]
 script = ExtResource("1_audio_script")
@@ -28,3 +29,5 @@ upgrade_rare_sound = ExtResource("8_upgrade_rare")
 upgrade_rare_volume = 0.0
 upgrade_epic_sound = ExtResource("9_upgrade_epic")
 upgrade_epic_volume = 0.0
+background_music = ExtResource("10_background_music")
+background_music_volume = -10.0

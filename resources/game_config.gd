@@ -16,8 +16,16 @@ class_name GameConfig
 @export_range(0.5, 2.0, 0.1) var enemy_speed_multiplier: float = 1.0  ## Multiplicador global de velocidade
 @export_range(0.5, 2.0, 0.1) var enemy_points_multiplier: float = 1.0  ## Multiplicador global de pontos
 
-@export_group("Wave System")
-@export var loop_waves: bool = true  ## Repetir waves quando acabar
+@export_group("Wave System (Procedural)")
+## Sistema procedural gera waves infinitas automaticamente
+@export_range(0.5, 2.0, 0.1) var difficulty_multiplier: float = 1.0  ## Multiplica curva de dificuldade global
+@export_range(0.2, 1.0, 0.05) var max_spawn_rate: float = 0.3  ## Intervalo mínimo entre spawns (segundos)
+@export_range(4, 10) var max_enemies_per_spawn: int = 6  ## Máximo de inimigos por batch
+
+@export_group("Boss Waves (Futuro)")
+## Sistema de boss ainda não implementado - configuração preparada
+@export_range(3, 10) var boss_every_n_waves: int = 5  ## Boss surge a cada N waves (ex: 5, 10, 15...)
+@export_range(3.0, 10.0, 0.5) var boss_prep_time: float = 5.0  ## Segundos de preparação antes do boss aparecer
 
 @export_group("Player Health")
 @export_range(1, 10) var player_max_health: int = 3  ## Vida máxima do player
