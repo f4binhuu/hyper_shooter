@@ -38,6 +38,9 @@ signal wave_completed(wave_number: int)
 
 
 func _ready() -> void:
+	# Configurar idioma padrão (pt_BR = português brasileiro)
+	TranslationServer.set_locale("pt_BR")
+
 	if not game_config:
 		push_error("ERRO: GameConfig não configurado! Adicione um game_config.tres no Inspector.")
 		return

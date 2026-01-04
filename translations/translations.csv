@@ -1,0 +1,43 @@
+keys,en,pt_BR
+FINAL_SCORE,FINAL SCORE,PONTUAÇÃO FINAL
+WAVE_REACHED,Wave Reached,Onda Alcançada
+MAX_COMBO,Max Combo,Combo Máximo
+WAVE,WAVE,ONDA
+SHIELD_INDICATOR,[SHIELD],[ESCUDO]
+LEVEL,LEVEL,NÍVEL
+XP,XP,XP
+SCORE,SCORE,PONTUAÇÃO
+SHOCKWAVE,SHOCKWAVE,ONDA DE CHOQUE
+COMBO,COMBO,COMBO
+LEVEL_PREFIX,Level,Nível
+ESCAPE,ESCAPE!,ESCAPOU!
+HP_PER_SECOND,HP/s,HP/s
+
+# Upgrade names
+UPGRADE_FIRE_RATE,Fire Rate,Cadência
+UPGRADE_DAMAGE,Damage,Dano
+UPGRADE_MULTI_SHOT,Multi-Shot,Multi-Tiro
+UPGRADE_PIERCE,Pierce,Perfuração
+UPGRADE_SPEED,Speed,Velocidade
+UPGRADE_SHIELD_BOOST,Shield Boost,Reforço de Escudo
+UPGRADE_SHOCKWAVE_BOOST,Shockwave Boost,Reforço de Onda de Choque
+UPGRADE_HEALTH_REGEN,Health Regen,Regeneração
+
+# Upgrade descriptions
+UPGRADE_FIRE_RATE_DESC,Increase your shooting speed,Aumenta a velocidade de disparo
+UPGRADE_DAMAGE_DESC,Increase bullet damage,Aumenta o dano dos projéteis
+UPGRADE_MULTI_SHOT_DESC,Fire multiple bullets at once,Atira múltiplos projéteis de uma vez
+UPGRADE_PIERCE_DESC,Bullets pierce through enemies,Projéteis atravessam inimigos
+UPGRADE_SPEED_DESC,Move faster,Move mais rápido
+UPGRADE_SHIELD_BOOST_DESC,Increase shield spawn chance,Aumenta chance de escudo aparecer
+UPGRADE_SHOCKWAVE_BOOST_DESC,Increase shockwave damage,Aumenta dano da onda de choque
+UPGRADE_HEALTH_REGEN_DESC,Regenerate HP over time,Regenera HP com o tempo
+
+# Upgrade stat labels
+STAT_FIRE_RATE,Fire Rate,Cadência
+STAT_EXTRA_DAMAGE,Extra Damage,Dano Extra
+STAT_EXTRA_PROJECTILES,Extra Projectiles,Projéteis Extras
+STAT_ENEMIES_PIERCED,Enemies Pierced,Inimigos Atravessados
+STAT_EXTRA_CHANCE,Extra Chance,Chance Extra
+STAT_EXTRA_DAMAGE_SHORT,Extra Dmg,Dano Extra
+STAT_REGENERATES,Regenerates,Regenera

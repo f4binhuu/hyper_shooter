@@ -167,7 +167,7 @@ func on_escape_screen():
 
 		# Feedback visual na posição do escape (borda inferior)
 		var escape_pos = Vector2(position.x, get_viewport_rect().size.y - 10)
-		spawn_floating_text("ESCAPE!", Color(1, 0.3, 0.3, 1), 32, escape_pos)
+		spawn_floating_text(tr("ESCAPE"), Color(1, 0.3, 0.3, 1), 32, escape_pos)
 
 	# Destruir o inimigo
 	queue_free()

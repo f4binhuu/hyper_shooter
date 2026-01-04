@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 upgrade_type = 4
-display_name = "Speed"
-description = "Move faster (not implemented yet)"
+display_name = "UPGRADE_SPEED"
+description = "UPGRADE_SPEED_DESC"
 icon_color = Color(1, 0.5, 1, 1)
 base_value = 50.0
 increment_per_level = 25.0

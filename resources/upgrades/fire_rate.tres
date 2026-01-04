@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Fire Rate"
-description = "Increase your shooting speed"
+display_name = "UPGRADE_FIRE_RATE"
+description = "UPGRADE_FIRE_RATE_DESC"
 base_value = 0.03
 increment_per_level = 0.02

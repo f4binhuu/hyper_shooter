@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 upgrade_type = 1
-display_name = "Damage"
-description = "Increase bullet damage"
+display_name = "UPGRADE_DAMAGE"
+description = "UPGRADE_DAMAGE_DESC"
 icon_color = Color(1, 0.3, 0.3, 1)
 base_value = 1.0
 increment_per_level = 1.0

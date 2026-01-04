@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 upgrade_type = 6
-display_name = "Shockwave"
-description = "Increase shockwave damage"
+display_name = "UPGRADE_SHOCKWAVE_BOOST"
+description = "UPGRADE_SHOCKWAVE_BOOST_DESC"
 icon_color = Color(1, 0.8, 0.3, 1)
 rarity = 2
 base_value = 1.0

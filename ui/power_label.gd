@@ -38,27 +38,27 @@ func _process(delta: float) -> void:
 			# Adicionar informação de wave se o game existir
 			var wave_text = ""
 			if game and game.current_wave:
-				wave_text = "WAVE " + str(game.current_wave.wave_number) + "\n"
+				wave_text = tr("WAVE") + " " + str(game.current_wave.wave_number) + "\n"
 
 			# HP agora é exibido na barra de vida do player, não precisa mais mostrar aqui
 
 			# Adicionar indicador de shield
 			var shield_text = ""
 			if "has_shield" in player and player.has_shield:
-				shield_text = " [SHIELD]"
+				shield_text = " " + tr("SHIELD_INDICATOR")
 
-			# Adicionar Level e XP 
+			# Adicionar Level e XP
 			var level_text = ""
 			if "current_level" in player and "current_xp" in player and "xp_to_next_level" in player:
-				level_text = "LEVEL " + str(player.current_level) + " | XP: " + str(player.current_xp) + "/" + str(player.xp_to_next_level) + "\n"
+				level_text = tr("LEVEL") + " " + str(player.current_level) + " | " + tr("XP") + ": " + str(player.current_xp) + "/" + str(player.xp_to_next_level) + "\n"
 
 			# Adicionar combo
 			var combo_text = ""
 			if "combo_count" in player and player.combo_count > 1:
 				var multiplier = player.get_combo_multiplier()
-				combo_text = "\nCOMBO x" + str(player.combo_count) + " (" + str(multiplier) + "x)"
+				combo_text = "\n" + tr("COMBO") + " x" + str(player.combo_count) + " (" + str(multiplier) + "x)"
 
-			text = wave_text + level_text + "SCORE: " + str(player.power) + shield_text + "\nSHOCKWAVE: " + str(charge_percent) + "%" + combo_text
+			text = wave_text + level_text + tr("SCORE") + ": " + str(player.power) + shield_text + "\n" + tr("SHOCKWAVE") + ": " + str(charge_percent) + "%" + combo_text
 
 			# Mudar cor baseado no combo, shield e carga
 			if "combo_count" in player and player.combo_count > 1:

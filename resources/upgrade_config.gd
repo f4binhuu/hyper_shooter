@@ -44,26 +44,25 @@ func get_value_at_level(level: int) -> float:
 	return value
 
 func get_description_at_level(level: int) -> String:
-	"""Retorna descrição com valor atual"""
 	var value = get_value_at_level(level)
 
 	match upgrade_type:
 		UpgradeType.FIRE_RATE:
-			return description + "\nCadência: -" + str(value) + "s"
+			return tr(description) + "\n" + tr("STAT_FIRE_RATE") + ": -" + str(value) + "s"
 		UpgradeType.DAMAGE:
-			return description + "\nDano extra: +" + str(int(value))
+			return tr(description) + "\n" + tr("STAT_EXTRA_DAMAGE") + ": +" + str(int(value))
 		UpgradeType.MULTI_SHOT:
-			return description + "\nProjéteis extras: +" + str(int(value))
+			return tr(description) + "\n" + tr("STAT_EXTRA_PROJECTILES") + ": +" + str(int(value))
 		UpgradeType.PIERCE:
-			return description + "\nInimigos atravessados: " + str(int(value))
+			return tr(description) + "\n" + tr("STAT_ENEMIES_PIERCED") + ": " + str(int(value))
 		UpgradeType.SHIELD_BOOST:
-			return description + "\nChance extra: +" + str(int(value * 100)) + "%"
+			return tr(description) + "\n" + tr("STAT_EXTRA_CHANCE") + ": +" + str(int(value * 100)) + "%"
 		UpgradeType.SHOCKWAVE_BOOST:
-			return description + "\nDano extra: +" + str(int(value))
+			return tr(description) + "\n" + tr("STAT_EXTRA_DAMAGE_SHORT") + ": +" + str(int(value))
 		UpgradeType.HEALTH_REGEN:
-			return description + "\nRegenera: +" + str(value) + " HP/s"
+			return tr(description) + "\n" + tr("STAT_REGENERATES") + ": +" + str(value) + " " + tr("HP_PER_SECOND")
 
-	return description
+	return tr(description)
 
 func get_min_level_required() -> int:
 	"""Retorna o nível mínimo necessário para este upgrade aparecer"""

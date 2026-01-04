@@ -28,9 +28,9 @@ func _ready():
 	tween.parallel().tween_property(panel, "scale", Vector2(1.0, 1.0), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func show_stats(score: int, wave: int, max_combo: int):
-	final_score_label.text = "FINAL SCORE: " + str(score)
-	wave_label.text = "Wave Reached: " + str(wave)
-	combo_label.text = "Max Combo: x" + str(max_combo)
+	final_score_label.text = tr("FINAL_SCORE") + ": " + str(score)
+	wave_label.text = tr("WAVE_REACHED") + ": " + str(wave)
+	combo_label.text = tr("MAX_COMBO") + ": x" + str(max_combo)
 
 func _on_restart_pressed():
 	restart_requested.emit()

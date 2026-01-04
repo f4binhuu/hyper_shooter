@@ -21,9 +21,9 @@ func setup(config: UpgradeConfig, level: int):
 	current_level = level
 
 	# Atualizar textos
-	title_label.text = config.display_name
+	title_label.text = tr(config.display_name)
 	description_label.text = config.get_description_at_level(level)
-	level_label.text = "Level " + str(level)
+	level_label.text = tr("LEVEL_PREFIX") + " " + str(level)
 
 	# Aplicar cor do upgrade
 	var style = panel.get_theme_stylebox("panel").duplicate()

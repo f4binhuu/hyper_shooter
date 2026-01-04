@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 upgrade_type = 2
-display_name = "Multi Shot"
-description = "Fire additional bullets in a fan pattern"
+display_name = "UPGRADE_MULTI_SHOT"
+description = "UPGRADE_MULTI_SHOT_DESC"
 icon_color = Color(0.3, 1, 0.3, 1)
 rarity = 1
 base_value = 1.0
